@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+pydantic-settings
+python-dotenv
+langchain langgraph
+langchain-google-genai langchain-openai langchain-ollama python-dotenv
