@@ -1,8 +1,11 @@
-fastapi
-uvicorn[standard]
-sqlalchemy
-pydantic
-pydantic-settings
+sqlalchemy>=2.0
+pydantic>=2.0
 python-dotenv
-langchain langgraph
-langchain-google-genai langchain-openai langchain-ollama python-dotenv
+langchain
+langgraph
+langchain-ollama
+langchain-openai
+langchain-google-genai
+langgraph-checkpoint-postgres
+psycopg[binary]
+pytest

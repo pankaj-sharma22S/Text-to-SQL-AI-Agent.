@@ -1,5 +1,4 @@
 import os
-
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
@@ -7,49 +6,41 @@ from langchain_ollama import ChatOllama
 
 load_dotenv()
 
+def get_model(provider: str | None = None, model: str | None = None, temperature: float = 0):
+    """Create the configured chat model.
 
-def get_model(provider: str, model: str | None = None, temperature: float = 0):
+    Supported providers: ``openrouter``, ``gemini``, and ``llama``.
+    ``llama`` uses Ollama locally. The provider can be passed explicitly or
+    selected with LLM_PROVIDER.
     """
-    Create an LLM from Gemini, OpenRouter, or Ollama.
-    """
+    selected = (provider or os.getenv("LLM_PROVIDER", "openrouter")).lower().strip()
 
-    provider = provider.lower()
-
-    # -------------------------
-    # GEMINI
-    # -------------------------
-    if provider == "gemini":
-
-        return ChatGoogleGenerativeAI(
-            model=model or "gemini-2.5-flash",
-            temperature=temperature,
-            google_api_key=os.getenv("GEMINI_API_KEY"),
-        )
-
-    # -------------------------
-    # OPENROUTER
-    # -------------------------
-    elif provider == "openrouter":
-
+    if selected == "openrouter":
+        api_key = os.getenv("OPENROUTER_API_KEY")
+        if not api_key:
+            raise RuntimeError("OPENROUTER_API_KEY is required for provider 'openrouter'")
         return ChatOpenAI(
-            model=model or "openai/gpt-4o-mini",
+            model=model or os.getenv("OPENROUTER_MODEL"),
             temperature=temperature,
-            api_key=os.getenv("OPENROUTER_API_KEY"),
-            base_url="https://openrouter.ai/api/v1",
+            api_key=api_key,
+            base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
         )
 
-    # -------------------------
-    # OLLAMA
-    # -------------------------
-    elif provider == "ollama":
+    if selected == "gemini":
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise RuntimeError("GEMINI_API_KEY is required for provider 'gemini'")
+        return ChatGoogleGenerativeAI(
+            model=model or os.getenv("GEMINI_MODEL"),
+            temperature=temperature,
+            google_api_key=api_key,
+        )
 
+    if selected in {"llama", "ollama"}:
         return ChatOllama(
-            model=model or "qwen2.5-coder:7b",
+            base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+            model=model or os.getenv("OLLAMA_MODEL"),
             temperature=temperature,
         )
 
-    else:
-        raise ValueError(
-            f"Unsupported provider: {provider}. "
-            "Use: gemini, openrouter, or ollama."
-        )
+    raise ValueError("Unsupported provider. Use: openrouter, gemini, or llama")
