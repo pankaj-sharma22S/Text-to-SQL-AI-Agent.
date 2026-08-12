@@ -1,4 +1,6 @@
 sqlalchemy>=2.0
+fastapi
+uvicorn[standard]
 pydantic>=2.0
 python-dotenv
 langchain

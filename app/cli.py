@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from sqlalchemy import text
 from langgraph.checkpoint.postgres import PostgresSaver
 from app.agents.graph import build_graph
-from app.tools.database_server import get_engine
+from app.tools.database_server import get_engine, get_checkpoint_url
 from app.schemas.sql import ConversationMessage
 
 load_dotenv(); logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -31,7 +31,7 @@ def run():
     url = os.getenv("DATABASE_URL")
     if not url: raise RuntimeError("DATABASE_URL is required")
     engine = get_engine(); ensure_memory_table(engine)
-    with PostgresSaver.from_conn_string(url) as saver:
+    with PostgresSaver.from_conn_string(get_checkpoint_url()) as saver:
         saver.setup(); graph = build_graph(saver); thread_id = None
         print("Text-to-SQL terminal. Commands: new, list, history, history <thread_id>, continue <thread_id>, exit")
         while True:

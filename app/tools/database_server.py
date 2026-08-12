@@ -11,6 +11,13 @@ def get_engine():
         raise RuntimeError("DATABASE_URL is required")
     return create_engine(url, pool_pre_ping=True)
 
+def get_checkpoint_url():
+    """Return a psycopg-compatible URL for LangGraph PostgresSaver."""
+    url = os.getenv("DATABASE_URL")
+    if not url:
+        raise RuntimeError("DATABASE_URL is required")
+    return url.replace("postgresql+psycopg://", "postgresql://", 1)
+
 def discover_schema(engine=None) -> DatabaseSchema:
     engine = engine or get_engine()
     inspector = inspect(engine)
