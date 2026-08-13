@@ -18,6 +18,10 @@ def get_checkpoint_url():
         raise RuntimeError("DATABASE_URL is required")
     return url.replace("postgresql+psycopg://", "postgresql://", 1)
 
+def is_mysql_url(url=None):
+    url = url or os.getenv("DATABASE_URL", "")
+    return url.lower().startswith(("mysql://", "mysql+"))
+
 def discover_schema(engine=None) -> DatabaseSchema:
     engine = engine or get_engine()
     inspector = inspect(engine)

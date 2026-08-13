@@ -1,13 +1,15 @@
 import asyncio
 from sqlalchemy import text
 from app.api.schemas.profile import UserProfile
+from app.tools.database_server import is_mysql_url
 
 class ProfileService:
     def __init__(self, engine): self.engine = engine
 
     def ensure_table(self):
         with self.engine.begin() as c:
-            c.execute(text("CREATE TABLE IF NOT EXISTS user_profile (id INTEGER PRIMARY KEY CHECK (id = 1), data JSONB NOT NULL)"))
+            data_type = "JSON" if is_mysql_url() else "JSONB"
+            c.execute(text(f"CREATE TABLE IF NOT EXISTS user_profile (id INTEGER PRIMARY KEY, data {data_type} NOT NULL)"))
 
     async def get(self):
         def query():
@@ -20,6 +22,9 @@ class ProfileService:
         data = profile.model_dump_json()
         def write():
             with self.engine.begin() as c:
-                c.execute(text("INSERT INTO user_profile(id, data) VALUES (1, CAST(:data AS JSONB)) ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data"), {"data": data})
+                if is_mysql_url():
+                    c.execute(text("INSERT INTO user_profile(id, data) VALUES (1, :data) ON DUPLICATE KEY UPDATE data = VALUES(data)"), {"data": data})
+                else:
+                    c.execute(text("INSERT INTO user_profile(id, data) VALUES (1, CAST(:data AS JSONB)) ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data"), {"data": data})
         await asyncio.to_thread(write)
         return profile

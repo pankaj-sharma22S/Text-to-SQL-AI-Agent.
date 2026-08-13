@@ -104,6 +104,13 @@ export function useChat() {
                 },
               ],
             }));
+          if (event === "error") {
+            setMessagesByThread((old) => ({
+              ...old,
+              [id]: (old[id] ?? []).slice(0, -1),
+            }));
+            setError(data || "Chat request failed");
+          }
         },
         controller.signal,
       );

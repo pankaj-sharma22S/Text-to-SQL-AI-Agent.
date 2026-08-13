@@ -1,0 +1,14 @@
+INFO:     Started server process [22028]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+2026-08-12 21:11:54,176 INFO Retrying request to /chat/completions in 0.419504 seconds
+2026-08-12 21:11:54,606 INFO Retrying request to /chat/completions in 0.864225 seconds
+2026-08-12 21:11:55,349 WARNING Failed to get info from https://api.smith.langchain.com: LangSmithConnectionError('Connection error caused failure to GET /info in LangSmith API. Please confirm your internet connection. ConnectionError(MaxRetryError(\'HTTPSConnectionPool(host=\\\'api.smith.langchain.com\\\', port=443): Max retries exceeded with url: /info (Caused by NewConnectionError("HTTPSConnection(host=\\\'api.smith.langchain.com\\\', port=443): Failed to establish a new connection: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions"))\'))\nContent-Length: None\nAPI Key: lsv2_********************************************fa')
+2026-08-12 21:11:55,352 WARNING Run compression is not enabled. Please update to the latest version of LangSmith. Falling back to regular multipart ingestion.
+2026-08-12 21:12:04,533 WARNING Failed to multipart ingest runs: Connection error caused failure to POST https://api.smith.langchain.com/runs/multipart in LangSmith API. Please confirm your internet connection. ConnectionError(MaxRetryError('HTTPSConnectionPool(host=\'api.smith.langchain.com\', port=443): Max retries exceeded with url: /runs/multipart (Caused by NewConnectionError("HTTPSConnection(host=\'api.smith.langchain.com\', port=443): Failed to establish a new connection: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions"))'))
+Content-Length: 5085
+API Key: lsv2_********************************************fatrace=019ff6a3-1b24-7d80-abff-21841e0ab19c,id=019ff6a3-1b24-7d80-abff-21841e0ab19c; trace=019ff6a3-221f-7de0-a551-a71abed7f457,id=019ff6a3-221f-7de0-a551-a71abed7f457
+2026-08-12 21:12:13,683 WARNING Failed to multipart ingest runs: Connection error caused failure to POST https://api.smith.langchain.com/runs/multipart in LangSmith API. Please confirm your internet connection. ConnectionError(MaxRetryError('HTTPSConnectionPool(host=\'api.smith.langchain.com\', port=443): Max retries exceeded with url: /runs/multipart (Caused by NewConnectionError("HTTPSConnection(host=\'api.smith.langchain.com\', port=443): Failed to establish a new connection: [WinError 10013] An attempt was made to access a socket in a way forbidden by its access permissions"))'))
+Content-Length: 10483
+API Key: lsv2_********************************************fatrace=019ff6a3-221f-7de0-a551-a71abed7f457,id=019ff6a3-221f-7de0-a551-a71abed7f457
